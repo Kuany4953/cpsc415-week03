@@ -36,4 +36,4 @@ The JSON is also read by an eval runner during the lab, and may later be read by
 - The exact command-line input mechanism (stdin vs. argv vs. file) is left to the spec, since it does not change what the program does for the lead.
 - How the program surfaces a hard failure (model error, bad key, timeout) is left to the spec; the contract is that success means a single valid JSON object on stdout, and anything else is a failure for the consumer.
 
-**Approved by:** kuany kuany, 5/10/2026
+**Approved by:** Kuany Kuany, 2026-10-05
