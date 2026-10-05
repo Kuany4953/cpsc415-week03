@@ -8,10 +8,19 @@ One paragraph. Link to the current `spec.md`.
 
 ## Commands
 ```
-# build
-# test
-# run
-# lint
+# run a single classification (message on stdin)
+export CHAT_BASE_URL="https://openrouter.ai/api/v1"
+export CHAT_MODEL="minimax/minimax-m3"
+# OPENROUTER_API_KEY must already be set in your shell profile. Never commit it.
+export CHAT_USAGE_OUT="/tmp/usage.json"   # optional
+echo "I was charged twice for the same invoice." | python3 classifier.py
+
+# run all cases
+export CHAT_USAGE_OUT="/tmp/usage.json"   # optional but recommended
+python3 eval.py
+
+# lint / format
+python3 -m py_compile classifier.py eval.py
 ```
 
 ## Conventions
