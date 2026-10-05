@@ -1,0 +1,37 @@
+[
+  {
+    "id": "clear_billing",
+    "kind": "clear",
+    "purpose": "Clear billing case: user reports a duplicate charge and asks for a refund.",
+    "message": "Hi, I just checked my credit card statement and I was charged twice for the same invoice last Tuesday. Can you refund the duplicate charge as soon as possible?",
+    "expected_category": "billing"
+  },
+  {
+    "id": "clear_technical",
+    "kind": "clear",
+    "purpose": "Clear technical case: app crash with concrete OS and version.",
+    "message": "Your mobile app crashes every time I open the Settings screen on my Pixel 7 running Android 14. I have reinstalled twice and it still crashes. Please fix.",
+    "expected_category": "technical"
+  },
+  {
+    "id": "clear_sales",
+    "kind": "clear",
+    "purpose": "Clear sales case: prospective customer comparing plans and asking about a trial.",
+    "message": "Hi! I'm comparing your Team and Business plans for a 25-person company. Does the Team plan include SSO, and can we try it before buying?",
+    "expected_category": "sales"
+  },
+  {
+    "id": "ambiguous_login_billing",
+    "kind": "ambiguous",
+    "purpose": "Ambiguous case: real support message that touches both login (technical) and billing-cycle timing.",
+    "message": "I haven't been able to log in since this morning, and I also got a billing-cycle email yesterday that I want to confirm before I try again. Can someone help me figure out what's going on?",
+    "allowed_categories": ["technical", "billing"]
+  },
+  {
+    "id": "off_topic_weather",
+    "kind": "off_topic",
+    "purpose": "Off-topic case: not a support request; expects unknown.",
+    "message": "Hi! What's the weather like in Hartford today? I'm visiting next week.",
+    "expected_category": "unknown"
+  }
+]
