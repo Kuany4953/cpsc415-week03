@@ -17,8 +17,9 @@ This spec implements `intent/classifier.md`.
   - **Output:** exactly one JSON object on stdout, parseable by `json.loads`, with three top-level string fields: `category`, `urgency`, `reason`. Nothing else is written to stdout on a successful run.
   - **Errors:** one-line human-readable messages on stderr and a non-zero exit code. No JSON, no partial output on stdout.
   - **API:** OpenRouter-compatible chat completions endpoint. The program reads three environment variables: `CHAT_BASE_URL` (the endpoint base URL), `CHAT_MODEL` (the model identifier — e.g. `minimax/minimax-m3`, or `xiaomi/mimo-v2.6-flash` for the comparison run), and `OPENROUTER_API_KEY` (the bearer token). The lab sets all three so the same program can be evaluated against multiple models.
-  - **Files:** none read or written. The program is stateless and emits no logs.
-- **Dependencies:** Python 3 standard library only (`json`, `sys`, `urllib.request`, `os`); network access to an OpenRouter-compatible endpoint; three environment variables — `CHAT_BASE_URL`, `CHAT_MODEL`, `OPENROUTER_API_KEY`. No third-party Python packages.
+  - **Files:** none read or written on the input side. The program may optionally write one line of JSON to a side file when an optional fourth environment variable is set (see Token usage). The program is otherwise stateless and emits no logs.
+  - **Token usage (optional side file):** the program reads a fourth environment variable, `CHAT_USAGE_OUT` — a file path. When set, on a successful run (i.e. immediately before the JSON object is printed to stdout) the classifier appends one line of JSON to that file with three fields: `prompt_tokens`, `completion_tokens`, `total_tokens`, populated from the API response's `usage` field. If `usage` is missing from the response, the three fields are written as `null`. Writing the usage line is best-effort: a failure to write the file aborts the run with a non-zero exit and a one-line error on stderr — the classification result is not printed on stdout in that case. When `CHAT_USAGE_OUT` is unset or empty, no side file is written. This lets the eval runner sum tokens across cases without changing the stdout contract.
+- **Dependencies:** Python 3 standard library only (`json`, `sys`, `urllib.request`, `os`); network access to an OpenRouter-compatible endpoint; three required environment variables — `CHAT_BASE_URL`, `CHAT_MODEL`, `OPENROUTER_API_KEY` — and one optional — `CHAT_USAGE_OUT`. No third-party Python packages.
 
 ## Behavior
 Requirements the eval will check. Numbered.
@@ -32,7 +33,7 @@ Requirements the eval will check. Numbered.
 ## Failure handling
 - **Empty stdin:** exit non-zero; one-line error on stderr (`empty input`); nothing on stdout.
 - **Non-UTF-8 stdin:** exit non-zero; one-line error on stderr; nothing on stdout.
-- **Missing or empty `OPENROUTER_API_KEY`, `CHAT_BASE_URL`, or `CHAT_MODEL`:** exit non-zero; one-line error on stderr naming the missing variable; nothing on stdout.
+- **Missing or empty `OPENROUTER_API_KEY`, `CHAT_BASE_URL`, or `CHAT_MODEL`:** exit non-zero; one-line error on stderr naming the missing variable; nothing on stdout. (`CHAT_USAGE_OUT` is optional; unset or empty is not a failure.)
 - **Network error or timeout calling OpenRouter:** exit non-zero; one-line error on stderr; no retry, no partial output on stdout.
 - **OpenRouter returns a non-2xx response:** exit non-zero; one-line error on stderr with the status; nothing on stdout.
 - **OpenRouter returns a 2xx but with an empty reply from the model** (no assistant message, or an empty content string): exit non-zero; one-line error on stderr; nothing on stdout.
