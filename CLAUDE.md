@@ -29,3 +29,12 @@ For an introductory lab, follow its explicitly assigned stages; the full chain b
 
 ## Common mistakes
 Things the agent got wrong before and must not repeat. Add to this list as they happen.
+## Working rules
+- This is the Week 3 introductory lab. Stages assigned: intent and spec.
+  No plan.md, no branches or pull requests. Commit to main.
+- Standard library only, except that Java may add one JSON library jar.
+
+## Team conventions
+- Language: Python 3, standard library only
+- Default model: minimax/minimax-m3 via OpenRouter
+- File naming: lowercase with underscores (e.g. classifier.py, eval.py, cases.json)
